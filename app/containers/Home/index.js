@@ -44,7 +44,7 @@ export default class Home extends React.PureComponent {
     }.bind(this))
   };
 
-  storeTasks = () => {
+  storeTask = () => {
     let data = new FormData();
     data.append('taskContent', this.state.inputItem);
 
@@ -53,7 +53,7 @@ export default class Home extends React.PureComponent {
       body:data
     })
     .then(function(response) {
-      return Response:json();
+      return response.json();
     })
     .then(function(json) {
       let listItems = this.state.listItems;
@@ -86,7 +86,7 @@ export default class Home extends React.PureComponent {
 
         <div className="inputContainer">
           <input type="text" className="todoInput" onChange={this.handleItem} value={this.state.inputItem}/>
-          <input type="submit" value="Add to List" className="todoButton" onClick={this.storeItem}/>
+          <input type="submit" value="Add to List" className="todoButton" onClick={this.storeTask}/>
         </div>
 
         <div className="todoList">
