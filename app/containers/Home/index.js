@@ -18,13 +18,52 @@ export default class Home extends React.PureComponent {
       listItems:[],
       inputItem:""
     }
+  };
+
+  componentWillMount() {
+    this.getTasks();
   }
 
   handleItem = (event) => {
     this.setState({
       inputItem:event.target.value
     })
-  }
+  };
+
+  getTasks = () => {
+    fetch('http://localhost:8000/api/getTasks', {
+      method:'GET'
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(json) {
+      this.setState({
+        listItems:json.tasks
+      })
+    }.bind(this))
+  };
+
+  storeTasks = () => {
+    let data = new FormData();
+    data.append('taskContent', this.state.inputItem);
+
+    fetch('http://localhost:8000/api/storeTask', {
+      method:'POST',
+      body:data
+    })
+    .then(function(response) {
+      return Response:json();
+    })
+    .then(function(json) {
+      let listItems = this.state.listItems;
+      listItems.push(json.task);
+      this.setState({
+        listItems:listItems
+      })
+      this.forceUpdate();
+    }.bind(this))
+  };
 
   storeItem = () => {
     var listItems = this.state.listItems;
@@ -38,7 +77,7 @@ export default class Home extends React.PureComponent {
         inputItem:""
       })
     }
-  }
+  };
 
   render() {
     return (
@@ -52,8 +91,8 @@ export default class Home extends React.PureComponent {
 
         <div className="todoList">
           {this.state.listItems.map((item, index) => (
-            <div className="listItem" key={index}>
-              {item}
+            <div className="listItem" key={index} onClick={this.strikeThrough}>
+              {item.taskContent}
             </div>
           ))}
 
@@ -61,8 +100,8 @@ export default class Home extends React.PureComponent {
 
       </div>
     );
-  }
-}
+  };
+};
 
 Home.contextTypes = {
   router: React.PropTypes.object
